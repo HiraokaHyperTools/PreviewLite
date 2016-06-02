@@ -1,0 +1,18 @@
+// PreviewLite.idl : PreviewLite の IDL ソース
+//
+
+// このファイルは、タイプ ライブラリ (PreviewLite.tlb) およびマーシャリング コードを
+// 作成するために MIDL ツールによって処理されます。
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	uuid(ADD22ED0-346F-4B83-86C7-75BA2F947FC1),
+	version(1.0),
+]
+library PreviewLiteLib
+{
+	importlib("stdole2.tlb");
+};
+
