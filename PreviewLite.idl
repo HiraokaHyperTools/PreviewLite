@@ -4,8 +4,39 @@
 // このファイルは、タイプ ライブラリ (PreviewLite.tlb) およびマーシャリング コードを
 // 作成するために MIDL ツールによって処理されます。
 
+#include "olectl.h"
 import "oaidl.idl";
 import "ocidl.idl";
+
+[
+	object,
+	uuid(50F16B25-467E-11D1-8271-00C04FC3183B),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IPreview : IDispatch{
+	[id(1)] HRESULT ShowFile(BSTR bstrFileName, int iSelectCount);
+	[propget, id(2)] HRESULT printable([out, retval] LONG* pVal);
+	[propput, id(2)] HRESULT printable([in] LONG newVal);
+	[propget, id(3)] HRESULT cxImage([out, retval] LONG* pVal);
+	[propget, id(4)] HRESULT cyImage([out, retval] LONG* pVal);
+	[id(5)] HRESULT Show(VARIANT var);
+};
+
+[
+	odl,
+	uuid(0AE0A2B1-3A34-11D3-9626-00C04F8EEC8C),
+	dual,
+	oleautomation
+]
+interface IPreview2 : IPreview {
+	[id(0x60030000)] HRESULT Zoom(int iSelectCount);
+	[id(0x60030001)] HRESULT BestFit();
+	[id(0x60030002)] HRESULT ActualSize();
+	[id(0x60030003)] HRESULT SlideShow();
+};
+
 
 [
 	uuid(ADD22ED0-346F-4B83-86C7-75BA2F947FC1),
@@ -14,5 +45,23 @@ import "ocidl.idl";
 library PreviewLiteLib
 {
 	importlib("stdole2.tlb");
+	[
+		uuid(0BDFE1A0-716D-4C75-A9AF-185B973E79D8)		
+	]
+	dispinterface _IPreviewEvents
+	{
+		properties:
+		methods:
+	};
+
+	[
+		uuid(50F16B26-467E-11D1-8271-00C04FC3183B),
+		control
+	]
+	coclass Preview
+	{
+		[default] interface IPreview2;
+		[default, source] dispinterface _IPreviewEvents;
+	};
 };
 

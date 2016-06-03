@@ -31,6 +31,9 @@
     <ClCompile Include="PreviewLite_i.c">
       <Filter>生成されたファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Preview.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -48,6 +51,12 @@
     <ClInclude Include="PreviewLite_i.h">
       <Filter>生成されたファイル</Filter>
     </ClInclude>
+    <ClInclude Include="_IPreviewEvents_CP.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Preview.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PreviewLite.rc">
@@ -64,10 +73,19 @@
     <None Include="PreviewLite.def">
       <Filter>ソース ファイル</Filter>
     </None>
+    <None Include="Preview.htm" />
+    <None Include="Preview.rgs">
+      <Filter>リソース ファイル</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="PreviewLite.idl">
       <Filter>ソース ファイル</Filter>
     </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Preview.bmp">
+      <Filter>リソース ファイル</Filter>
+    </Image>
   </ItemGroup>
 </Project>
