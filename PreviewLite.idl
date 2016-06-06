@@ -39,14 +39,14 @@ interface IPreview2 : IPreview {
 
 
 [
-	uuid(ADD22ED0-346F-4B83-86C7-75BA2F947FC1),
+	uuid(50F16B18-467E-11D1-8271-00C04FC3183B),
 	version(1.0),
 ]
 library PreviewLiteLib
 {
 	importlib("stdole2.tlb");
 	[
-		uuid(0BDFE1A0-716D-4C75-A9AF-185B973E79D8)		
+		uuid(1B490296-50DF-11D1-8B44-00C04FC3183B)
 	]
 	dispinterface _IPreviewEvents
 	{

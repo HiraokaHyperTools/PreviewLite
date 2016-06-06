@@ -2,7 +2,7 @@ HKCR
 {
 	PreviewLite.Preview.1 = s 'Preview Class'
 	{
-		CLSID = s '{FC23D5FC-0A24-4BF6-9398-62A9230CEAB1}'
+		CLSID = s '{50F16B26-467E-11D1-8271-00C04FC3183B}'
 	}
 	PreviewLite.Preview = s 'Preview Class'
 	{		
@@ -10,7 +10,7 @@ HKCR
 	}
 	NoRemove CLSID
 	{
-		ForceRemove {FC23D5FC-0A24-4BF6-9398-62A9230CEAB1} = s 'Preview Class'
+		ForceRemove {50F16B26-467E-11D1-8271-00C04FC3183B} = s 'Preview Class'
 		{
 			ProgID = s 'PreviewLite.Preview.1'
 			VersionIndependentProgID = s 'PreviewLite.Preview'

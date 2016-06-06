@@ -42,59 +42,64 @@ public:
 
 #pragma warning(pop)
 
-DECLARE_OLEMISC_STATUS(OLEMISC_RECOMPOSEONRESIZE |
-	OLEMISC_CANTLINKINSIDE |
-	OLEMISC_INSIDEOUT |
-	OLEMISC_ACTIVATEWHENVISIBLE |
-	OLEMISC_SETCLIENTSITEFIRST
-)
+	CxImage pic;
+	int printable;
 
-DECLARE_REGISTRY_RESOURCEID(IDR_PREVIEW)
+	DECLARE_OLEMISC_STATUS(0
+		|OLEMISC_RECOMPOSEONRESIZE
+		|OLEMISC_CANTLINKINSIDE
+		|OLEMISC_INSIDEOUT
+		|OLEMISC_ACTIVATEWHENVISIBLE
+		|OLEMISC_SETCLIENTSITEFIRST
+		)
+
+		DECLARE_REGISTRY_RESOURCEID(IDR_PREVIEW)
 
 
-BEGIN_COM_MAP(CPreview)
-	COM_INTERFACE_ENTRY(IPreview)
-	COM_INTERFACE_ENTRY(IPreview2)
-	COM_INTERFACE_ENTRY(IDispatch)
-	COM_INTERFACE_ENTRY(IViewObjectEx)
-	COM_INTERFACE_ENTRY(IViewObject2)
-	COM_INTERFACE_ENTRY(IViewObject)
-	COM_INTERFACE_ENTRY(IOleInPlaceObjectWindowless)
-	COM_INTERFACE_ENTRY(IOleInPlaceObject)
-	COM_INTERFACE_ENTRY2(IOleWindow, IOleInPlaceObjectWindowless)
-	COM_INTERFACE_ENTRY(IOleInPlaceActiveObject)
-	COM_INTERFACE_ENTRY(IOleControl)
-	COM_INTERFACE_ENTRY(IOleObject)
-	COM_INTERFACE_ENTRY(ISupportErrorInfo)
-	COM_INTERFACE_ENTRY(IConnectionPointContainer)
-	COM_INTERFACE_ENTRY(IQuickActivate)
-	COM_INTERFACE_ENTRY(IProvideClassInfo)
-	COM_INTERFACE_ENTRY(IProvideClassInfo2)
-END_COM_MAP()
+	BEGIN_COM_MAP(CPreview)
+		COM_INTERFACE_ENTRY(IPreview)
+		COM_INTERFACE_ENTRY(IPreview2)
+		COM_INTERFACE_ENTRY(IDispatch)
+		COM_INTERFACE_ENTRY(IViewObjectEx)
+		COM_INTERFACE_ENTRY(IViewObject2)
+		COM_INTERFACE_ENTRY(IViewObject)
+		COM_INTERFACE_ENTRY(IOleInPlaceObjectWindowless)
+		COM_INTERFACE_ENTRY(IOleInPlaceObject)
+		COM_INTERFACE_ENTRY2(IOleWindow, IOleInPlaceObjectWindowless)
+		COM_INTERFACE_ENTRY(IOleInPlaceActiveObject)
+		COM_INTERFACE_ENTRY(IOleControl)
+		COM_INTERFACE_ENTRY(IOleObject)
+		COM_INTERFACE_ENTRY(ISupportErrorInfo)
+		COM_INTERFACE_ENTRY(IConnectionPointContainer)
+		COM_INTERFACE_ENTRY(IQuickActivate)
+		COM_INTERFACE_ENTRY(IProvideClassInfo)
+		COM_INTERFACE_ENTRY(IProvideClassInfo2)
+	END_COM_MAP()
 
-BEGIN_PROP_MAP(CPreview)
-	PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
-	PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-	// エントリの例
-	// PROP_ENTRY_TYPE("プロパティ名", dispid, clsid, vtType)
-	// PROP_PAGE(CLSID_StockColorPage)
-END_PROP_MAP()
+	BEGIN_PROP_MAP(CPreview)
+		PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
+		PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
+		// エントリの例
+		// PROP_ENTRY_TYPE("プロパティ名", dispid, clsid, vtType)
+		// PROP_PAGE(CLSID_StockColorPage)
+	END_PROP_MAP()
 
-BEGIN_CONNECTION_POINT_MAP(CPreview)
-	CONNECTION_POINT_ENTRY(__uuidof(_IPreviewEvents))
-END_CONNECTION_POINT_MAP()
+	BEGIN_CONNECTION_POINT_MAP(CPreview)
+		CONNECTION_POINT_ENTRY(__uuidof(_IPreviewEvents))
+	END_CONNECTION_POINT_MAP()
 
-BEGIN_MSG_MAP(CPreview)
-	MESSAGE_HANDLER(WM_CREATE, OnCreate)
-	MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocus)
-	CHAIN_MSG_MAP(CComControl<CPreview>)
-ALT_MSG_MAP(1)
-	// スーパークラス Static のメッセージ マップ エントリに置き換えます。
-END_MSG_MAP()
-// ハンドラー プロトタイプ:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+	BEGIN_MSG_MAP(CPreview)
+		MESSAGE_HANDLER(WM_CREATE, OnCreate)
+		MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocus)
+		//MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBkgnd)
+		CHAIN_MSG_MAP(CComControl<CPreview>)
+		ALT_MSG_MAP(1)
+		// スーパークラス Static のメッセージ マップ エントリに置き換えます。
+	END_MSG_MAP()
+	// ハンドラー プロトタイプ:
+	//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
+	//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
 
 	LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
@@ -107,7 +112,14 @@ END_MSG_MAP()
 		return 0;
 	}
 
-	STDMETHOD(SetObjectRects)(LPCRECT prcPos,LPCRECT prcClip)
+	// http://microsoft.public.vc.atl.narkive.com/t9sSahd4/atl-activex-control-flicker
+	LRESULT OnEraseBkgnd(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	{
+		bHandled = TRUE;
+		return 0;
+	}
+
+	STDMETHOD(SetObjectRects)(LPCRECT prcPos, LPCRECT prcClip)
 	{
 		IOleInPlaceObjectWindowlessImpl<CPreview>::SetObjectRects(prcPos, prcClip);
 		int cx, cy;
@@ -116,7 +128,7 @@ END_MSG_MAP()
 		return S_OK;
 	}
 
-// ISupportsErrorInfo
+	// ISupportsErrorInfo
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid)
 	{
 		static const IID* const arr[] =
@@ -124,7 +136,7 @@ END_MSG_MAP()
 			&IID_IPreview,
 		};
 
-		for (int i=0; i<sizeof(arr)/sizeof(arr[0]); i++)
+		for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++)
 		{
 			if (InlineIsEqualGUID(*arr[i], riid))
 				return S_OK;
@@ -132,15 +144,16 @@ END_MSG_MAP()
 		return S_FALSE;
 	}
 
-// IViewObjectEx
+	// IViewObjectEx
 	DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// IPreview
+	// IPreview
 
 	DECLARE_PROTECT_FINAL_CONSTRUCT()
 
 	HRESULT FinalConstruct()
 	{
+		printable = 0;
 		return S_OK;
 	}
 
@@ -149,12 +162,41 @@ END_MSG_MAP()
 
 	}
 
+	class Fitrect {
+	public:
+		static CRect Fit(CRect rcMax, CSize rcBox) {
+			if (rcMax.Height() == 0 || rcBox.cy == 0)
+				return rcMax;
+			float frMax = rcMax.Width() / (float)rcMax.Height();
+			float frBox = rcBox.cx / (float)rcBox.cy;
+			float centerx = ((float)rcMax.left + rcMax.right) / 2;
+			float centery = ((float)rcMax.top + rcMax.bottom) / 2;
+			if (frMax >= frBox) {
+				// 縦長
+				float v = float(rcBox.cx) * rcMax.Height() / rcBox.cy / 2;
+				return CRect(
+					int(centerx - v),
+					int(rcMax.top),
+					int(centerx + v),
+					int(rcMax.bottom)
+				);
+			}
+			else {
+				// 横長
+				float v = float(rcBox.cy) * rcMax.Width() / rcBox.cx / 2;
+				return CRect(
+					int(rcMax.left),
+					int(centery - v),
+					int(rcMax.right),
+					int(centery + v)
+				);
+			}
+		}
+	};
+
 	virtual HRESULT OnDraw(
 		ATL_DRAWINFO& di
-	) {
-		TextOut(di.hdcDraw, di.prcBounds->left, di.prcBounds->top, L"TEST", 4);
-		return S_OK;
-	}
+	);
 
 	STDMETHOD(ShowFile)(BSTR bstrFileName, int iSelectCount);
 	STDMETHOD(get_printable)(LONG* pVal);
