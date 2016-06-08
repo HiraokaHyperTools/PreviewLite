@@ -28,7 +28,8 @@ class ATL_NO_VTABLE CPreview :
 	public IQuickActivateImpl<CPreview>,
 	public IProvideClassInfo2Impl<&CLSID_Preview, &__uuidof(_IPreviewEvents), &LIBID_PreviewLiteLib>,
 	public CComCoClass<CPreview, &CLSID_Preview>,
-	public CComControl<CPreview>
+	public CComControl<CPreview>,
+	public IPersistStreamInitImpl<CPreview>
 {
 public:
 #pragma warning(push)
@@ -74,7 +75,16 @@ public:
 		COM_INTERFACE_ENTRY(IQuickActivate)
 		COM_INTERFACE_ENTRY(IProvideClassInfo)
 		COM_INTERFACE_ENTRY(IProvideClassInfo2)
+		COM_INTERFACE_ENTRY(IPersistStreamInit)
+		//COM_INTERFACE_ENTRY_FUNC_BLIND(0, SayNoif)
 	END_COM_MAP()
+
+	static HRESULT WINAPI SayNoif(void* pv, REFIID riid, LPVOID* ppv, DWORD dw) {
+		LPOLESTR pcw = NULL;
+		StringFromCLSID(riid, &pcw);
+		::MessageBoxW(NULL, pcw, NULL, MB_OK);
+		return S_FALSE;
+	}
 
 	BEGIN_PROP_MAP(CPreview)
 		PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
