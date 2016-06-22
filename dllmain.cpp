@@ -25,6 +25,7 @@ CPreviewLiteApp theApp;
 
 BOOL CPreviewLiteApp::InitInstance()
 {
+	ATL::CTrace::SetLevel(100);
 	return CWinApp::InitInstance();
 }
 

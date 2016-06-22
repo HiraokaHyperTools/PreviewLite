@@ -219,6 +219,13 @@ public:
 	STDMETHOD(BestFit)(void);
 	STDMETHOD(ActualSize)(void);
 	STDMETHOD(SlideShow)(void);
+
+	HRESULT IPersistStreamInit_Load(
+		_Inout_ LPSTREAM pStm,
+		_In_ const ATL_PROPMAP_ENTRY* pMap)
+	{
+		return S_OK;
+	}
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(Preview), CPreview)
