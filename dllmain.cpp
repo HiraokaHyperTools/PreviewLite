@@ -25,7 +25,9 @@ CPreviewLiteApp theApp;
 
 BOOL CPreviewLiteApp::InitInstance()
 {
+#ifdef DEBUG
 	ATL::CTrace::SetLevel(100);
+#endif
 	return CWinApp::InitInstance();
 }
 
