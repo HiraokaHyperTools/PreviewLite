@@ -226,6 +226,16 @@ public:
 	{
 		return S_OK;
 	}
+
+	HRESULT IPersistStreamInit_Save(
+		_Inout_ LPSTREAM pStm,
+		_In_ BOOL fClearDirty,
+		_In_ const ATL_PROPMAP_ENTRY* pMap)
+	{
+		if (fClearDirty)
+			m_bRequiresSave = FALSE;
+		return S_OK;
+	}
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(Preview), CPreview)
