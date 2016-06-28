@@ -45,6 +45,7 @@ public:
 
 	CxImage pic;
 	int printable;
+	CString status;
 
 	DECLARE_OLEMISC_STATUS(0
 		|OLEMISC_RECOMPOSEONRESIZE
@@ -125,7 +126,6 @@ public:
 	// http://microsoft.public.vc.atl.narkive.com/t9sSahd4/atl-activex-control-flicker
 	LRESULT OnEraseBkgnd(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
 	{
-		bHandled = TRUE;
 		return 0;
 	}
 

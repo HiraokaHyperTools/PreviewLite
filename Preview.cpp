@@ -10,15 +10,21 @@ STDMETHODIMP CPreview::ShowFile(BSTR bstrFileName, int iSelectCount)
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	pic.Clear();
+	status.Empty();
 
-	if (!pic.Load(T2CW(bstrFileName))) {
+	if (wcslen(bstrFileName) < 1) {
+		status = "プレビューは空です。";
 		FireViewChange();
-		return E_FAIL;
+		return S_OK;
 	}
 
+	bool f = pic.Load(T2CW(bstrFileName));
+	if (!f) {
+		status.Format(L"表示できません %s", bstrFileName);
+	}
 	FireViewChange();
 
-	return S_OK;
+	return f ? S_OK : S_FALSE;
 }
 
 
@@ -70,7 +76,7 @@ STDMETHODIMP CPreview::Show(VARIANT var)
 		return ShowFile(var.bstrVal, 0);
 	}
 
-	return E_FAIL;
+	return S_FALSE;
 }
 
 
@@ -116,13 +122,20 @@ STDMETHODIMP CPreview::SlideShow()
 HRESULT CPreview::OnDraw(
 	ATL_DRAWINFO& di
 ) {
+	CRect rcMax = CRect(di.prcBounds->left, di.prcBounds->top, di.prcBounds->right, di.prcBounds->bottom);
+	FillRect(di.hdcDraw, rcMax, (HBRUSH)GetStockObject(WHITE_BRUSH));
+
 	if (pic.IsValid()) {
-		CRect rcMax = CRect(di.prcBounds->left, di.prcBounds->top, di.prcBounds->right, di.prcBounds->bottom);
 		CRect rc = Fitrect::Fit(
 			rcMax,
 			CSize(pic.GetWidth(), pic.GetHeight())
 		);
 		pic.Draw(di.hdcDraw, rc, 0, true);
+	}
+	else {
+		SetBkColor(di.hdcDraw, RGB(255, 255, 255));
+		SetTextColor(di.hdcDraw, RGB(0, 0, 0));
+		DrawText(di.hdcDraw, status, status.GetLength(), rcMax, DT_LEFT|DT_TOP);
 	}
 	return S_OK;
 }
